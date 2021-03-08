@@ -1,0 +1,45 @@
+{% extends 'bootstrap/base.html' %}
+{% block html_attribs %} lang="pt-BR"{% endblock %}
+{% block title %}CADASTRO DE ESTOQUE{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Index</a>
+      <a class="nav-item nav-link" href="/cadastro">Cadastro</a>
+      <a class="nav-item nav-link" href="/estoque">Estoque</a>
+      <a class="nav-item nav-link" href="/estoque/cadastro">Estoque_Cad<span class="sr-only">(current)</span></a>
+    </div>
+  </div>
+</nav>
+
+<br>
+
+<h1>Novo Estoque</h1>
+
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.produto_nome.label }}<br>
+    {{ form.produto_nome }}
+  </p>
+  <p>
+    {{ form.produto_dsc.label }} (512 characters!)<br>
+    {{ form.produto_dsc }}
+  </p>
+  <p>
+    {{ form.preco.label }} (R$)<br>
+    {{ form.preco }}
+  </p>
+  <p>
+    {{ form.qtd_estoque.label }}<br>
+    {{ form.qtd_estoque }}
+  </p>
+  <p>
+    {{ form.submit() }}
+  </p>
+</form>
+{% endblock %}
