@@ -9,9 +9,15 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/">Index <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/cadastro">Cadastro</a>
+      {% if not isLogged %}
+        <a class="nav-item nav-link" href="/login">Login</a>
+        <a class="nav-item nav-link" href="/cadastro">Cadastro</a>
+      {% endif %}
       <a class="nav-item nav-link" href="/estoque">Estoque</a>
       <a class="nav-item nav-link" href="/estoque/cadastro">Estoque_Cad</a>
+      {% if isLogged %}
+        <a class="nav-item nav-link" href="/logout">Logout</a>
+      {% endif %}
     </div>
   </div>
 </nav>
