@@ -141,6 +141,6 @@ def not_found_error(error):
   return render_template("erro.html", cod_erro=404, desc_erro="Página não encontrada!"), 404
 
 @app.errorhandler(500)
-def not_found_error(error):
+def internal_error(error):
   db.session.rollback()
   return render_template("erro.html", cod_erro=500, desc_erro="Erro interno do servidor!"), 500
