@@ -3,6 +3,9 @@ from wtforms import StringField, IntegerField, DecimalField, PasswordField, Subm
 from wtforms.validators import DataRequired
 
 
+class DeleteForm(FlaskForm):
+  submit = SubmitField('Confirmar Exclusão')
+
 class UsuarioForm(FlaskForm):
   nome = StringField('Nome', validators=[DataRequired()])
   senha = PasswordField('Senha', validators=[DataRequired()])

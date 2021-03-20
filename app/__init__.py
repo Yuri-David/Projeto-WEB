@@ -16,6 +16,22 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = "login"
 
+import logging
+from logging.handlers import RotatingFileHandler
+import os
+
+if not os.path.exists("logs"):
+  os.mkdir("logs")
+
+arquivo_handler = RotatingFileHandler("logs/erros.log", maxBytes=100000, backupCount=10)
+arquivo_handler.setFormatter(logging.Formatter(
+  "%(asctime)s %(levelname)s: %(message)s [em %(pathname)s: %(lineno)d]"))
+arquivo_handler.setLevel(logging.WARNING)
+app.logger.addHandler(arquivo_handler)
+app.logger.setLevel(logging.INFO)
+app.logger.info("Aplicação inicializada!")
+
+
 from app.controllers import default
 from app.models import usuario
 from app.models import estoque

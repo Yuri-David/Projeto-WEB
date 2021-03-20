@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Estoque(db.Model):
   id = db.Column(db.Integer(), primary_key=True)
-  produto_nome = db.Column(db.String(64), index=True)
+  produto_nome = db.Column(db.String(64), index=True, unique=True)
   produto_dsc = db.Column(db.String(512), index=True)
   qtd_estoque = db.Column(db.Integer(), index=True)
   qtd_vendidos = db.Column(db.Integer(), index=True)

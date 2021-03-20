@@ -1,6 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 {% block html_attribs %} lang="pt-BR"{% endblock %}
-{% block title %}USUÁRIOS{% endblock %}
+{% block title %}ESTOQUES{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 {% endblock %}
@@ -8,12 +8,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/">Index <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link active" href="/">Index</a>
       {% if not Logged %}
         <a class="nav-item nav-link" href="/login">Login</a>
         <a class="nav-item nav-link" href="/cadastro">Cadastro</a>
       {% endif %}
-      <a class="nav-item nav-link" href="/estoques">Estoques</a>
+      <a class="nav-item nav-link" href="/estoques">Estoques<span class="sr-only">(current)</span></a>
       {% if Logged %}
         <a class="nav-item nav-link" href="/estoques/novo">Novo_Estoque</a>
         <a class="nav-item nav-link" href="/logout">Logout</a>
@@ -25,28 +25,34 @@
 <br>
 <div class="container">
   <div class="page-header">
-    <h1>{{ usuarios|length }} usuários encontrados</h1>
+    <h1>{{ estoques|length }} estoques encontrados</h1>
   </div>
-  {% if usuarios %}
+  {% if estoques %}
   <table class="table table-striped">
     <tr>
       <th>ID</th>
       <th>Nome</th>
-      <th>Email</th>
-      <th>Nacionalidade</th>
+      <th>Preço</th>
+      <th>Descrição</th>
+      <th>Qtd_Estoque</th>
+      <th>Qtd_Vendidos</th>
+      <th>Avaliação</th>
       {% if Logged %}
       <th>Ações</th>
       {% endif %}
     </tr>
-  {% for usuario in usuarios %}
+  {% for estoque in estoques %}
     <tr>
-      <td>{{ usuario.id }}</td>
-      <td>{{ usuario.nome }}</td>
-      <td>{{ usuario.email }}</td>
-      <td>{{ usuario.nacionalidade }}</td>
+      <td>{{ estoque.id }}</td>
+      <td>{{ estoque.produto_nome }}</td>
+      <td>R${{ estoque.preco }}</td>
+      <td>{{ estoque.produto_dsc }}</td>
+      <td>{{ estoque.qtd_estoque }}</td>
+      <td>{{ estoque.qtd_vendidos }}</td>
+      <td>{{ estoque.avaliacao }}</td>
       {% if Logged %}
-      <td><a href="{{ url_for('usuario_editar', id=usuario.id) }}">Editar</a></td>
-      <td><a href="{{ url_for('usuario_excluir', id=usuario.id) }}">Excluir</a></td>
+      <td><a href="{{ url_for('estoque_editar', id=estoque.id) }}">Editar</a></td>
+      <td><a href="{{ url_for('estoque_excluir', id=estoque.id) }}">Excluir</a></td>
       {% endif %}
     </tr>
   {% endfor %}
