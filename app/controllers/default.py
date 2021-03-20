@@ -81,7 +81,7 @@ def usuario_excluir(id):
   if u is None:
     return abort(404)
   if form.validate_on_submit():
-    db.session.delete(e)
+    db.session.delete(u)
     db.session.commit()
     return redirect(url_for("index"))
   return render_template("usuario_exclusao.html", form=form, usuario=u, Logged=current_user.is_authenticated)
