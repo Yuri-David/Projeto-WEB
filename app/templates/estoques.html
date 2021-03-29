@@ -36,7 +36,8 @@
       <th>Descrição</th>
       <th>Qtd_Estoque</th>
       <th>Qtd_Vendidos</th>
-      <th>Avaliação</th>
+      <th>Nota</th>
+      <th>Avaliações</th>
       {% if Logged %}
       <th>Ações</th>
       {% endif %}
@@ -49,10 +50,22 @@
       <td>{{ estoque.produto_dsc }}</td>
       <td>{{ estoque.qtd_estoque }}</td>
       <td>{{ estoque.qtd_vendidos }}</td>
-      <td>{{ estoque.avaliacao }}</td>
-      {% if Logged %}
-      <td><a href="{{ url_for('estoque_editar', id=estoque.id) }}">Editar</a></td>
-      <td><a href="{{ url_for('estoque_excluir', id=estoque.id) }}">Excluir</a></td>
+      {% if estoque.avaliacoes.count() > 0 %}
+        <td>{{ estoque.avaliacoes | sum (attribute='nota') / estoque.avaliacoes.count() }}</td>
+        <td><a href="{{ url_for('estoque_avaliacoes', id_e=estoque.id) }}">{{ estoque.avaliacoes.count() }}</a> | <a href="{{ url_for('estoque_avaliar', id_e=estoque.id) }}">++</a></td>
+      {% else %}
+        <td>---</td>
+        <td>0 | <a href="{{ url_for('estoque_avaliar', id_e=estoque.id) }}">++</a></td>
+      {% endif %}
+      {% if usuario_atual == estoque.usuario_id %}
+      <td>
+        <a href="{{ url_for('estoque_editar', id=estoque.id) }}">Editar</a> <br>
+        <a href="{{ url_for('estoque_excluir', id=estoque.id) }}">Excluir</a>
+      </td>
+      {% elif usuario_atual == None %}
+
+      {% else %}
+        <td>XXX</td>
       {% endif %}
     </tr>
   {% endfor %}

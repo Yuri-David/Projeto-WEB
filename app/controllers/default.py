@@ -1,15 +1,21 @@
 from app import app
 from flask import request, render_template, redirect, url_for, flash, abort
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models.forms import UsuarioForm, LoginForm, EstoqueForm, DeleteForm
+from app.models.forms import UsuarioForm, LoginForm, EstoqueForm, DeleteForm, AvaliacaoForm
 from app.models.usuario import Usuario
 from app.models.estoque import Estoque
+from app.models.avaliacao import Avaliacao
 from app import db
 
 @app.route("/")
 def index():
   usuarios = Usuario.query.all()
-  return render_template("index.html", usuarios=usuarios, Logged=current_user.is_authenticated)
+  u = None
+  nome_usuario = ""
+  if current_user.is_authenticated:
+    u = int(current_user.get_id())
+    nome_usuario = Usuario.query.get(u).nome
+  return render_template("index.html", usuarios=usuarios, usuario_atual=u, nome_usuario=nome_usuario, Logged=current_user.is_authenticated)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -41,6 +47,7 @@ def cadastro():
     u.set_senha(form.senha.data)
     db.session.add(u)
     db.session.commit()
+    login_user(u)
     return redirect(url_for("estoques"))
   return render_template("cadastro.html", form=form)
 
@@ -89,15 +96,21 @@ def usuario_excluir(id):
 @app.route("/estoques")
 def estoques():
   estoques = Estoque.query.all()
-  return render_template("estoques.html", estoques=estoques, Logged=current_user.is_authenticated)
+  u = None
+  if current_user.is_authenticated:
+    u = int(current_user.get_id())
+  return render_template("estoques.html", estoques=estoques, usuario_atual=u, Logged=current_user.is_authenticated)
 
 @app.route("/estoques/novo", methods=['GET', 'POST'])
 @login_required
 def estoque_novo():
   form = EstoqueForm()
+  u = int(current_user.get_id())
+  if u is None:
+    return abort(404)
   if form.validate_on_submit():
     e = Estoque(produto_nome=form.produto_nome.data, produto_dsc=form.produto_dsc.data,
-      qtd_estoque=form.qtd_estoque.data, preco=form.preco.data)
+      qtd_estoque=form.qtd_estoque.data, preco=form.preco.data, usuario_id=u)
     db.session.add(e)
     db.session.commit()
     return redirect(url_for("estoques"))
@@ -135,6 +148,43 @@ def estoque_excluir(id):
     db.session.commit()
     return redirect(url_for("estoques"))
   return render_template("estoque_exclusao.html", form=form, estoque=e, Logged=current_user.is_authenticated)
+
+@app.route("/estoques/<id_e>/avaliacoes")
+def estoque_avaliacoes(id_e):
+  avaliacoes = Avaliacao.query.filter_by(estoque_id=id_e)
+  u = None
+  if current_user.is_authenticated:
+    u = int(current_user.get_id())
+  return render_template("avaliacoes.html", avaliacoes=avaliacoes, usuario_atual=u, estoque_id=id_e, Logged=current_user.is_authenticated)
+
+@app.route("/estoques/<id_e>/avaliar", methods=['GET', 'POST'])
+@login_required
+def estoque_avaliar(id_e):
+  form = AvaliacaoForm()
+  e = Estoque.query.get(id_e)
+  id_u = int(current_user.get_id())
+  u = Usuario.query.get(id_u)
+  if e is None:
+    return abort(404)
+  if form.validate_on_submit():
+    a = Avaliacao(autor=u.nome, nota=form.nota.data, comentario=form.comentario.data, usuario_id=id_u, estoque_id=id_e)
+    db.session.add(a)
+    db.session.commit()
+    return redirect(url_for("estoque_avaliacoes", id_e=id_e))
+  return render_template("estoque_avaliacao.html", form=form, estoque=e, Logged=current_user.is_authenticated)
+
+@app.route("/estoques/<id_e>/avaliacoes/<id_a>/excluir", methods=['GET', 'POST'])
+@login_required
+def estoque_avaliacao_excluir(id_e, id_a):
+  form = DeleteForm()
+  a = Avaliacao.query.get(id_a)
+  if a is None:
+    return abort(404)
+  db.session.delete(a)
+  db.session.commit()
+  return redirect(url_for("estoque_avaliacoes", id_e=id_e))
+
+
 
 @app.errorhandler(404)
 def not_found_error(error):

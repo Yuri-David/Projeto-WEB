@@ -25,3 +25,8 @@ class EstoqueForm(FlaskForm):
   qtd_estoque = IntegerField('Estoque', validators=[DataRequired()])
   preco = DecimalField('Preço', places = 2, rounding = None, validators=[DataRequired()])
   submit = SubmitField('Salvar')
+
+class AvaliacaoForm(FlaskForm):
+  nota = IntegerField('Nota', validators=[DataRequired()])
+  comentario = TextAreaField('Comentário', validators=[DataRequired()])
+  submit = SubmitField('Salvar')

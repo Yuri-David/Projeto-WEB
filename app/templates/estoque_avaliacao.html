@@ -1,0 +1,45 @@
+{% extends 'bootstrap/base.html' %}
+{% block html_attribs %} lang="pt-BR"{% endblock %}
+{% block title %}AVALIAR ESTOQUE{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Index</a>
+      <a class="nav-item nav-link" href="/estoques">Estoques</a>
+      <a class="nav-item nav-link" href="/estoques/novo">Novo_Estoque</a>
+      <a class="nav-item nav-link" href="/logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<br>
+<div class="container">
+  <h1>Avaliar Estoque</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      
+      <p>
+        {{ form.nota.label }}<br>
+        {{ form.nota() }}
+      </p>
+      <p>
+        {{ form.comentario.label }} (512 characters!)<br>
+        {{ form.comentario() }}
+      </p>
+      <p>
+        {{ form.submit() }}
+      </p>
+
+    </form>
+  </div>
+</div>
+
+</div>
+{% endblock %}

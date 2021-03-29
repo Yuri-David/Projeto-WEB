@@ -1,6 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 {% block html_attribs %} lang="pt-BR"{% endblock %}
-{% block title %}USUÁRIOS{% endblock %}
+{% block title %}AVALIAÇÕES DO ESTOQUE{% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 {% endblock %}
@@ -24,46 +24,30 @@
 
 <br>
 <div class="container">
-  {% if usuario_atual == None %}
-    <div class="page-header">
-      <h1>{{ usuarios|length }} usuários encontrados</h1>
-    </div>
-  {% else %}
-    <div class="page-header">
-      <h1>Logado: {{ nome_usuario }}</h1>
-      <h3>{{ usuarios|length }} usuários encontrados</h3>
-    </div>
-  {% endif %}
-  {% if usuarios %}
-  <table class="table table-striped">
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Email</th>
-      <th>Nacionalidade</th>
-      {% if Logged %}
-        <th>Ações</th>
+
+{% if avaliacoes %}
+{% for avaliacao in avaliacoes %}
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+
+        <h5 class="card-title"> {{avaliacao.autor}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted"> {{avaliacao.timestamp}}</h6><br>
+        <h6 class="card-subtitle mb-2 text-muted"> Nota:  {{avaliacao.nota}}</h6><br>
+        <p class="text-muted" style="margin-bottom: 5px;"> Descrição:</p>
+        <p class="card-text">
+            {{avaliacao.comentario}}
+        </p>
+
+      {% if usuario_atual == avaliacao.usuario_id %}
+        <br><p><a href="{{ url_for('estoque_avaliacao_excluir', id_e=estoque_id, id_a=avaliacao.id) }}">Excluir</a></p>
       {% endif %}
-    </tr>
-  {% for usuario in usuarios %}
-    <tr>
-      <td>{{ usuario.id }}</td>
-      <td>{{ usuario.nome }}</td>
-      <td>{{ usuario.email }}</td>
-      <td>{{ usuario.nacionalidade }}</td>
-      {% if usuario_atual == usuario.id %}
-      <td>
-        <a href="{{ url_for('usuario_editar', id=usuario.id) }}">Editar</a>
-        <a href="{{ url_for('usuario_excluir', id=usuario.id) }}">Excluir</a>
-      </td>
-      {% elif usuario_atual == None %}
-      
-      {% else %}
-        <td>XXX</td>
-      {% endif %}
-    </tr>
-  {% endfor %}
-  </table>
+
+    </div>
+</div>
+
+{% endfor %}
 {% endif %}
+
 </div>
 {% endblock %}

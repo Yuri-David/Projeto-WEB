@@ -2,6 +2,7 @@ from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 @login.user_loader
 def load_user(id):
   return Usuario.query.get(int(id))
@@ -14,6 +15,7 @@ class Usuario(UserMixin, db.Model):
   senha_hash = db.Column(db.String(128))
   nacionalidade = db.Column(db.String(32), index=True)
   estoques = db.relationship('Estoque', backref='usuario', lazy='dynamic')
+  avaliacoes = db.relationship('Avaliacao', backref='usuario', lazy='dynamic')
 
   def set_senha(self, senha):
     self.senha_hash = generate_password_hash(senha)
@@ -22,4 +24,4 @@ class Usuario(UserMixin, db.Model):
     return check_password_hash(self.senha_hash, senha)
 
   def __repr__(self):
-    return '<Usuario {}>'.format(self.nome, self.email)
+    return '<Usuario {} {}>'.format(self.nome, self.email)
